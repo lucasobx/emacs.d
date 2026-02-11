@@ -137,8 +137,7 @@
 
   :bind
   ("C-c i" . (lambda () (interactive)
-               (find-file
-                (locate-user-emacs-file "init.el"))))
+               (find-file (locate-user-emacs-file "init.el"))))
 
   ("C-x a" . (lambda () (interactive)
                (set-mark-command nil)
@@ -167,14 +166,11 @@
   (set-face-attribute 'font-lock-comment-delimiter-face nil :weight 'normal)
   (set-face-attribute 'font-lock-comment-face nil :weight 'normal))
 
-(use-package quasi-monochrome-theme
-  :ensure t)
-
 ;; punpun-themes
 (use-package punpun-themes
   :ensure t
   :config
-  (load-theme 'punpun-dark t)
+  ;; (load-theme 'punpun-dark t)
   (let ((gray "#454545"))
     (set-face-attribute 'font-lock-comment-face nil :foreground gray :weight 'normal)
     (set-face-attribute 'font-lock-comment-delimiter-face nil :foreground gray :weight 'normal)))
@@ -183,23 +179,13 @@
 (use-package doric-themes
   :ensure t
   :config
+  (load-theme 'doric-dark)
+  (let ((background-color "#0A0A0A"))
+    (set-face-attribute 'default nil :background background-color))
   (set-face-attribute 'font-lock-comment-face nil :slant 'normal)
   (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'normal)
   (set-face-attribute 'font-lock-builtin-face nil :slant 'normal)
   (set-face-attribute 'font-lock-type-face nil :slant 'normal))
-
-;; base16-theme
-(use-package base16-theme
-  :ensure t)
-  ;; :config
-  ;; (load-theme 'base16-black-metal-immortal))
-
-;; doom-themes
-(use-package doom-themes
-  :ensure t
-  :custom
-  (doom-themes-enable-bold)
-  (doom-themes-enable-italic))
 
 ;; ligature
 (use-package ligature
