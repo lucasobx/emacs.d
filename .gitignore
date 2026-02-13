@@ -1,6 +1,8 @@
 /elpa/
 /elpaca/
 /eln-cache/
+/transient/
+/tree-sitter/
 /auto-save-list/
 custom-vars.el
 ido.last

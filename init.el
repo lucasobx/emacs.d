@@ -1,8 +1,6 @@
 ;;; init.el --- Emacs --- -*- lexical-binding: t; -*-
-
 ;;; =====================================================================
 ;;; Commentary:
-;;;
 ;;; Code:
 
 ;; increases the garbage collection threshold
@@ -103,7 +101,7 @@
   (global-display-line-numbers-mode t)
   (tooltip-mode -1)
   (add-to-list 'default-frame-alist '(width . 128))
-  (add-to-list 'default-frame-alist '(height . 42))
+  (add-to-list 'default-frame-alist '(height . 36))
   ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
   (defun display-startup-echo-area-message ()
     (message ""))
@@ -118,16 +116,13 @@
   ;; save manual customizations to a separate file instead of cluttering `init.el'.
   (setq custom-file (locate-user-emacs-file "custom-vars.el"))
   (load custom-file 'noerror 'nomessage)
-  
-  (set-face-attribute 'default nil :font "PragmataPro Liga" :height 140)
-  
-  ;; (set-face-attribute 'default nil
-  ;;                     :font "TX-02"
-  ;;                     :height 148
-  ;;                     :weight 'normal
-  ;;                     :slant 'normal
-  ;;                     :width 'extra-condensed)
-  
+
+  ;; fonts
+  ;; (set-face-attribute 'default nil :font "PragmataPro Liga" :height 140)
+  (set-face-attribute 'default nil
+                      :font "TX-02" :height 142 :slant 'normal :width 'condensed)
+
+  ;; other settings
   (set-display-table-slot standard-display-table 'vertical-border (make-glyph-code ?│))
   (setq global-auto-revert-non-file-buffers t)
   (put 'narrow-to-region 'disabled nil)
@@ -151,71 +146,43 @@
   ("C-=" . text-scale-increase)
   ("C--" . text-scale-decrease)
   ("C-<tab>" . other-window)
-  ("C-c d" . duplicate-line)
+  ("C-c p" . duplicate-line)
   ("C-;" . comment-line))
 
 ;;; =====================================================================
 ;;; UI
-
-;; bespoke-themes
-(use-package bespoke-themes
-  :elpaca (:host github :repo "mclear-tools/bespoke-themes" :branch "main")
-  :config
-  (setq bespoke-set-theme 'dark)
-  ;; (load-theme 'bespoke t)
-  (set-face-attribute 'font-lock-comment-delimiter-face nil :weight 'normal)
-  (set-face-attribute 'font-lock-comment-face nil :weight 'normal))
-
-;; punpun-themes
-(use-package punpun-themes
-  :ensure t
-  :config
-  ;; (load-theme 'punpun-dark t)
-  (let ((gray "#454545"))
-    (set-face-attribute 'font-lock-comment-face nil :foreground gray :weight 'normal)
-    (set-face-attribute 'font-lock-comment-delimiter-face nil :foreground gray :weight 'normal)))
 
 ;; doric-themes
 (use-package doric-themes
   :ensure t
   :config
   (load-theme 'doric-dark)
-  (let ((background-color "#0A0A0A"))
-    (set-face-attribute 'default nil :background background-color))
-  (set-face-attribute 'font-lock-comment-face nil :slant 'normal)
-  (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'normal)
+  (set-face-attribute 'default nil :background "#101010")
+  (dolist (face '(font-lock-comment-face
+                  font-lock-comment-delimiter-face
+                  font-lock-type-face
+                  font-lock-variable-name-face
+                  font-lock-keyword-face
+                  font-lock-function-name-face
+                  font-lock-constant-face
+                  font-lock-string-face))
+    (set-face-attribute face nil :slant 'normal :weight 'normal))
   (set-face-attribute 'font-lock-builtin-face nil :slant 'normal)
-  (set-face-attribute 'font-lock-type-face nil :slant 'normal))
+  (set-face-attribute 'font-lock-variable-name-face nil :foreground "#a0c0d0")
+  (set-face-attribute 'font-lock-comment-face nil :foreground "#8b7099")
+  (set-face-attribute 'font-lock-comment-delimiter-face nil :foreground "#8b7099")
+  (set-face-attribute 'font-lock-string-face nil :foreground "#9fbfe7"))
 
-;; ligature
-(use-package ligature
-  :ensure t
-  :config
-  (ligature-set-ligatures 'prog-mode
-                          '("!=" "!==" "!≡" "!≡≡" "!=<" "#(" "#_" "#{" "#?" "##"
-                            "#_(" "#[" "%=" "&%" "&&" "&+" "&-" "&/" "&=" "&&&"
-                            "$>" "(|" "*>" "++" "+++" "+=" "+>" "++=" "--" "-<"
-                            "-<<" "-=" "->" "->>" "---" "-->" "-+-" "-\\/" "-|>" "-<|"
-                            "->-" "-<-" "-|" "-||" "-|:" ".=" "//=" "/=" "/==" "/-\\"
-                            "/-:" "/->" "/=>" "/-<" "/=<" "/=:" ":=" ":≡" ":=>"
-                            ":-\\" ":=\\" ":-/" ":=/" ":-|" ":=|" ":|-" ":|=" "<$>"
-                            "<*" "<*>" "<+>" "<-" "<<=" "<=>" "<>" "<|>" "<<-" "<|"
-                            "<=<" "<~" "<~~" "<<~" "<$" "<+" "<!>" "<@>" "<#>" "<%>"
-                            "<^>" "<&>" "<?>" "<.>" "</>" "<\\>" "<\">" "<:>" "<~>" "<**>"
-                            "<<^" "<=" "<->" "<!--" "<--" "<~<" "<==>" "<|-" "<||" "<<|"
-                            "<-<" "<-->" "<<==" "<==" "<-\\" "<-/" "<=\\" "<=/" "=<<"
-                            "==" "===" "==>" "=>" "=~" "=>>" "=~=" "==>>" "=>=" "=<="
-                            "=<" "==<" "=<|" "=/=" "=/<" "=|" "=||" "=|:" ">-" ">>-"
-                            ">>=" ">=>" ">>^" ">>|" ">!=" ">->" ">==" ">=" ">/=" ">-|"
-                            ">=|" ">-\\" ">=\\" ">-/" ">=/" ">λ=" "?." "^=" "^<<" "^>>"
-                            "\\=" "\\==" "\\/=" "\\-/" "\\-:" "\\->" "\\=>" "\\-<" "\\=<"
-                            "\\=:" "|=" "|>=" "|>" "|+|" "|->" "|-->" "|=>" "|==>" "|>-"
-                            "|<<" "||>" "|>>" "|-" "||-" "||=" "|)" "|]" "|-:" "|=:"
-                            "|-<" "|=<" "|--<" "|==<" "~=" "~>" "~~>" "~>>" "[[" "[|"
-                            "_|_" "]]" "≡≡" "≡≡≡" "≡:≡" "≡/" "≡/≡" ";;" ";;;" ";;;;" ";;;;;"
-                            "=>>>" "<<<=" "=!=" "<---" "<--->" "--->"
-                            "- [v]" "- [x]" "- [-]" "- [ ]"))
-  (global-ligature-mode t))
+;; punpun-themes
+;; (use-package punpun-themes
+;;   :ensure t
+;;   :config
+;;   (load-theme 'punpun-dark t)
+;;   (set-face-attribute 'font-lock-variable-name-face nil :slant 'normal)
+;;   (set-face-attribute 'font-lock-comment-face nil :foreground "#454545" :weight 'normal)
+;;   (set-face-attribute 'font-lock-comment-delimiter-face nil :foreground "#454545" :weight 'normal)
+;;   (set-face-attribute 'font-lock-variable-name-face nil :foreground "#8b7099")
+;;   (set-face-attribute 'font-lock-string-face nil :foreground "#7b94b3"))
 
 ;; rainbow-delimiters
 (use-package rainbow-delimiters
@@ -231,10 +198,10 @@
   (doom-modeline-height 30)
   :config
   ;; faces
-  ;; (set-face-attribute 'mode-line nil :font "TX-02 SemiLight" :height 110)
-  (set-face-attribute 'mode-line nil :font "PragmataPro Liga" :height 132)
-  ;; (set-face-attribute 'mode-line-inactive nil :font "TX-02 SemiLight" :height 110)
-  (set-face-attribute 'mode-line-inactive nil :font "PragmataPro Liga" :height 132)
+  (set-face-attribute 'mode-line nil
+                      :font "TX-02 Retina" :height 132 :slant 'normal :width 'semi-condensed)
+  (set-face-attribute 'mode-line-inactive nil
+                      :font "TX-02 Retina" :height 132 :slant 'normal :width 'semi-condensed)
   (set-face-attribute 'doom-modeline-urgent nil :weight 'normal)
   (set-face-attribute 'doom-modeline-warning nil :weight 'normal)
   (set-face-attribute 'doom-modeline-info nil :weight 'normal)
@@ -270,12 +237,14 @@
   :custom
   (dired-listing-switches "-lah --group-directories-first")
   (dired-dwim-target t)
-  (dired-guess-shell-alist-user
-   '(("\\.\\(png\\|jpe?g\\|tiff\\)" "feh" "xdg-open" "open")
-     (".*" "open" "xdg-open")))
   (dired-kill-when-opening-new-dired-buffer t))
 
-;; avy (jump anywhere on screen based on characters, lines or words)
+;; nerd-icons-dired
+(use-package nerd-icons-dired
+  :ensure t
+  :hook (dired-mode . nerd-icons-dired-mode))
+
+;; avy
 (use-package avy
   :ensure t
   :init
@@ -300,7 +269,7 @@
 ;;; =====================================================================
 ;;; LSP
 
-;; flymake (syntax checking)
+;; flymake
 (use-package flymake
   :ensure nil
   :defer t
@@ -317,7 +286,7 @@
          (lua-ts-mode . eglot-ensure))
   :config
   (add-to-list 'eglot-server-programs
-               `((lua-mode lua-ts-mode) . ("/home/linuxbrew/.linuxbrew/bin/lua-language-server"))))
+               `((lua-mode lua-ts-mode) . ("lua-language-server"))))
 
 ;; lua-mode
 (use-package lua-mode :ensure t)
@@ -337,13 +306,24 @@
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode t))
 
+;; ansi-color
+(use-package ansi-color
+  :ensure nil
+  :hook (compilation-filter . ansi-color-compilation-filter))
+
+;; exec-path-from-shell
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize))
+
 ;;; =====================================================================
 ;;; Completion
 
-;; vertico (completion system)
+;; vertico
 (use-package vertico :ensure t :init (vertico-mode))
 
-;; marginalia (add annotations to the minibuffer completions)
+;; marginalia
 (use-package marginalia
   :ensure t
   :after vertico
@@ -356,7 +336,7 @@
   :init
   (marginalia-mode))
 
-;; orderless (fuzzy completion)
+;; orderless
 (use-package orderless
   :ensure t
   :custom
@@ -375,15 +355,15 @@
   ;; C-x bindings in `ctl-x-map'
   ("C-x b" . consult-buffer)
   ;; M-s bindings in `search-map'
-  ("M-s d" . consult-find)
-  ("M-s c" . consult-locate)
-  ("M-s g" . consult-grep)
-  ("M-s G" . consult-git-grep)
-  ("M-s r" . consult-ripgrep)
-  ("M-s l" . consult-line)
-  ("M-s L" . consult-line-multi)
-  ("M-s k" . consult-keep-lines)
-  ("M-s u" . consult-focus-lines))
+  ("C-c s d" . consult-find)
+  ("C-c s c" . consult-locate)
+  ("C-c g"   . consult-grep)
+  ("C-c s G" . consult-git-grep)
+  ("C-c s r" . consult-ripgrep)
+  ("C-c l"   . consult-line)
+  ("C-c s L" . consult-line-multi)
+  ("C-c s k" . consult-keep-lines)
+  ("C-c s u" . consult-focus-lines))
 
 ;; embark
 (use-package embark
@@ -396,7 +376,7 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
-;; corfu (completion popup)
+;; corfu
 (use-package corfu
   :ensure t
   :bind
@@ -404,11 +384,21 @@
   :custom
   (corfu-quit-no-match t)
   (corfu-scroll-margin 5)
-  (corfu-max-width 50)
-  (corfu-min-width 50)
+  (corfu-min-width 30)
+  (corfu-border-width 3)
+  (corfu-popupinfo-max-width 50)
+  (corfu-popupinfo-max-height 11)
   :init
   (global-corfu-mode t)
-  (corfu-popupinfo-mode))
+  (corfu-popupinfo-mode)
+  :config
+  (set-face-attribute 'corfu-default nil
+                      :family "PragmataPro Liga"
+                      :height 132)
+  (set-face-attribute 'corfu-popupinfo nil
+                      :family "PragmataPro Liga"
+                      :height 132)
+  (set-face-attribute 'corfu-border nil :background "#332d38"))
 
 ;; nerd-icons-corfu
 (use-package nerd-icons-corfu
@@ -432,7 +422,6 @@
         which-key-separator " → ")
   (which-key-add-key-based-replacements
     "C-c i" "init.el"
-    "C-c d" "duplicate line"
     "C-x e" "select to end"
     "C-x a" "select to start"))
 
@@ -443,8 +432,6 @@
   :custom
   (devil-all-keys-repeatable t)
   (devil-highlight-repeatable t)
-  :bind
-  ;;([remap describe-key] . devil-describe-key)
   :config
   (global-devil-mode))
 
@@ -463,9 +450,8 @@
   :bind
   (("C-h f" . helpful-callable)
    ("C-h v" . helpful-variable)
-   ("C-h k" . helpful-key)
    ("C-h x" . helpful-command)
-   ("C-c C-d" . helpful-at-point)
+   ("C-c d" . helpful-at-point)
    ("C-h F" . helpful-function)))
 
 ;;; init.el ends here
