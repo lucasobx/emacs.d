@@ -113,7 +113,7 @@
     (string-match "\\*[^*]+\\*" (buffer-name buffer)))
   (setq switch-to-prev-buffer-skip 'skip-these-buffers)
 
-  ;; save manual customizations to a separate file instead of cluttering `init.el'.
+  ;; save manual customizations to a separate file
   (setq custom-file (locate-user-emacs-file "custom-vars.el"))
   (load custom-file 'noerror 'nomessage)
 
@@ -134,25 +134,13 @@
   ("C-c i" . (lambda () (interactive)
                (find-file (locate-user-emacs-file "init.el"))))
 
-  ("C-x a" . (lambda () (interactive)
-               (set-mark-command nil)
-               (move-beginning-of-line nil)))
-
-  ("C-x e" . (lambda () (interactive)
-               (set-mark-command nil)
-               (move-end-of-line nil)))
-
-  ("<escape>" . keyboard-escape-quit)
   ("C-=" . text-scale-increase)
   ("C--" . text-scale-decrease)
-  ("C-<tab>" . other-window)
-  ("C-c p" . duplicate-line)
-  ("C-;" . comment-line))
+  ("C-<tab>" . other-window))
 
 ;;; =====================================================================
 ;;; UI
 
-;; doric-themes
 (use-package doric-themes
   :ensure t
   :config
@@ -173,7 +161,6 @@
   (set-face-attribute 'font-lock-comment-delimiter-face nil :foreground "#8b7099")
   (set-face-attribute 'font-lock-string-face nil :foreground "#9fbfe7"))
 
-;; punpun-themes
 ;; (use-package punpun-themes
 ;;   :ensure t
 ;;   :config
@@ -184,13 +171,11 @@
 ;;   (set-face-attribute 'font-lock-variable-name-face nil :foreground "#8b7099")
 ;;   (set-face-attribute 'font-lock-string-face nil :foreground "#7b94b3"))
 
-;; rainbow-delimiters
 (use-package rainbow-delimiters
   :ensure t
   :hook
   (prog-mode . rainbow-delimiters-mode))
 
-;; doom-modeline
  (use-package doom-modeline
   :ensure t
   :demand t
@@ -216,7 +201,6 @@
   (setq nerd-icons-scale-factor 1.0)
   (doom-modeline-mode t))
 
-;; indent-guide
 (use-package indent-guide
   :ensure t
   :defer t
@@ -228,7 +212,6 @@
 ;;;; =====================================================================
 ;;;; Navigation
 
-;; dired
 (use-package dired
   :ensure nil
   :hook
@@ -239,12 +222,10 @@
   (dired-dwim-target t)
   (dired-kill-when-opening-new-dired-buffer t))
 
-;; nerd-icons-dired
 (use-package nerd-icons-dired
   :ensure t
   :hook (dired-mode . nerd-icons-dired-mode))
 
-;; avy
 (use-package avy
   :ensure t
   :init
@@ -255,13 +236,11 @@
   ("C-f" . avy-goto-char-2)
   ("C-:" . avy-goto-char-timer))
 
-;; move-text
 (use-package move-text
   :ensure t
   :config
   (move-text-default-bindings))
 
-;; restart-emacs
 (use-package restart-emacs
   :ensure t
   :bind (("C-x M-c" . restart-emacs)))
@@ -269,7 +248,6 @@
 ;;; =====================================================================
 ;;; LSP
 
-;; flymake
 (use-package flymake
   :ensure nil
   :defer t
@@ -279,7 +257,6 @@
    '((error "!»" compilation-error) (warning "»" compilation-warning)
      (note "»" compilation-info))))
 
-;; eglot
 (use-package eglot
   :ensure nil
   :hook ((lua-mode . eglot-ensure)
@@ -288,16 +265,13 @@
   (add-to-list 'eglot-server-programs
                `((lua-mode lua-ts-mode) . ("lua-language-server"))))
 
-;; lua-mode
 (use-package lua-mode :ensure t)
 
-;; lua-ts-mode
 (use-package lua-ts-mode
   :ensure nil
   :config
   (setq treesit-font-lock-level 4))
 
-;; treesit-auto
 (use-package treesit-auto
   :ensure t
   :custom
@@ -306,12 +280,10 @@
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode t))
 
-;; ansi-color
 (use-package ansi-color
   :ensure nil
   :hook (compilation-filter . ansi-color-compilation-filter))
 
-;; exec-path-from-shell
 (use-package exec-path-from-shell
   :ensure t
   :config
@@ -320,10 +292,8 @@
 ;;; =====================================================================
 ;;; Completion
 
-;; vertico
 (use-package vertico :ensure t :init (vertico-mode))
 
-;; marginalia
 (use-package marginalia
   :ensure t
   :after vertico
@@ -336,7 +306,6 @@
   :init
   (marginalia-mode))
 
-;; orderless
 (use-package orderless
   :ensure t
   :custom
@@ -345,38 +314,31 @@
   (completion-category-defaults nil)
   (completion-pcm-leading-wildcard t))
 
-;; consult
 (use-package consult
   :ensure t
-  :after vertico
-  :bind
-  ;; C-c bindings in `mode-specific-map'
-  ("C-c M-x" . consult-mode-command)
-  ;; C-x bindings in `ctl-x-map'
-  ("C-x b" . consult-buffer)
-  ;; M-s bindings in `search-map'
-  ("C-c s d" . consult-find)
-  ("C-c s c" . consult-locate)
-  ("C-c g"   . consult-grep)
-  ("C-c s G" . consult-git-grep)
-  ("C-c s r" . consult-ripgrep)
-  ("C-c l"   . consult-line)
-  ("C-c s L" . consult-line-multi)
-  ("C-c s k" . consult-keep-lines)
-  ("C-c s u" . consult-focus-lines))
+  :after vertico)
+  ;; :bind
+  ;; ("C-c M-x" . consult-mode-command)
+  ;; ("C-x b" . consult-buffer)
+  ;; ("C-c s d" . consult-find)
+  ;; ("C-c s c" . consult-locate)
+  ;; ("C-c g"   . consult-grep)
+  ;; ("C-c s G" . consult-git-grep)
+  ;; ("C-c s r" . consult-ripgrep)
+  ;; ("C-c l"   . consult-line)
+  ;; ("C-c s L" . consult-line-multi)
+  ;; ("C-c s k" . consult-keep-lines)
+  ;; ("C-c s u" . consult-focus-lines))
 
-;; embark
 (use-package embark
   :ensure t
   :defer t)
 
-;; embark-consult
 (use-package embark-consult
   :ensure t
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
-;; corfu
 (use-package corfu
   :ensure t
   :bind
@@ -400,7 +362,6 @@
                       :height 132)
   (set-face-attribute 'corfu-border nil :background "#332d38"))
 
-;; nerd-icons-corfu
 (use-package nerd-icons-corfu
   :ensure t
   :after corfu
@@ -410,7 +371,6 @@
 ;;; =====================================================================
 ;;; Keybindings
 
-;; which-key
 (use-package which-key
   :ensure nil
   :init
@@ -425,7 +385,6 @@
     "C-x e" "select to end"
     "C-x a" "select to start"))
 
-;; devil-mode
 (use-package devil
   :ensure (devil :host github :repo "fbrosda/devil" :branch "which-key-support")
   :demand t
@@ -435,16 +394,28 @@
   :config
   (global-devil-mode))
 
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  :config
+  (evil-mode 1))
+
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
+
 ;;; =====================================================================
 ;;; Productivity
 
-;; org-mode
 (use-package org :ensure nil :defer t)
 
 ;;; =====================================================================
 ;;; Misc
 
-;; helpful
 (use-package helpful
   :ensure t
   :bind
