@@ -161,6 +161,12 @@
   (set-face-attribute 'font-lock-comment-delimiter-face nil :foreground "#8b7099")
   (set-face-attribute 'font-lock-string-face nil :foreground "#9fbfe7"))
 
+(use-package purple-haze-theme
+  :ensure t
+  :config
+  (set-face-attribute 'default nil :background "#101010"))
+  ;;(set-face-attribute 'default nil :background "#171717"))
+
 ;; (use-package punpun-themes
 ;;   :ensure t
 ;;   :config
@@ -379,11 +385,7 @@
   (setq which-key-idle-delay 0.3
         which-key-add-column-padding 1
         which-key-min-display-lines 6
-        which-key-separator " → ")
-  (which-key-add-key-based-replacements
-    "C-c i" "init.el"
-    "C-x e" "select to end"
-    "C-x a" "select to start"))
+        which-key-separator " → "))
 
 (use-package devil
   :ensure (devil :host github :repo "fbrosda/devil" :branch "which-key-support")
@@ -397,8 +399,11 @@
 (use-package evil
   :ensure t
   :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
+  (setq evil-want-integration t
+        evil-want-keybinding nil
+        evil-vsplit-window-right t
+        evil-split-window-below t
+        evil-undo-system 'undo-redo)
   :config
   (evil-mode 1))
 
@@ -408,6 +413,16 @@
   :config
   (evil-collection-init))
 
+(use-package general
+  :ensure t
+  :init
+  (setq general-override-states '(insert emacs hybrid normal visual motion operator replace))
+  :config
+  (general-create-definer leader-keys
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+  (leader-def "t" '(:ignore t :which-key "toggles")))
+                         
 ;;; =====================================================================
 ;;; Productivity
 
@@ -415,6 +430,23 @@
 
 ;;; =====================================================================
 ;;; Misc
+
+;; disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                shell-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode -1))))
+
+;; kill buffer and window
+(defun my/kill-buffer-and-window ()
+  (interactive)
+  (let ((buffer (current-buffer)))
+    (when (and (> (count-windows) 1)
+               (not (one-window-p)))
+      (delete-window))
+    (kill-buffer buffer)))
+(global-set-key (kbd "C-x k") #'my/kill-buffer-and-window)
 
 (use-package helpful
   :ensure t
